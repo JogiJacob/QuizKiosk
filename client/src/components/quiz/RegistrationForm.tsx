@@ -7,7 +7,8 @@ import { useQuiz } from '@/context/QuizContext';
 import { createDocument } from '@/hooks/useFirestore';
 import { useToast } from '@/hooks/use-toast';
 import { insertParticipantSchema } from '@shared/schema';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, Sparkles, Trophy, Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function RegistrationForm() {
   const { currentQuiz } = useQuiz();
@@ -83,114 +84,168 @@ export function RegistrationForm() {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <Card>
-        <CardContent className="p-8">
-          <div className="text-center mb-8">
-            <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <UserPlus className="text-primary h-8 w-8" />
-            </div>
-            <h2 className="text-3xl font-bold text-foreground mb-2" data-testid="text-registration-title">
-              Join the Leaderboard
-            </h2>
-            <p className="text-muted-foreground">
-              Enter your details to save your score (optional)
-            </p>
-            <div className="mt-4 p-4 bg-muted/30 rounded-lg">
-              <p className="text-sm font-medium text-foreground">
-                Selected Quiz: {currentQuiz.quiz.title}
+    <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-16 h-16 bg-accent/20 rounded-full animate-bounce delay-0"></div>
+        <div className="absolute top-40 right-20 w-12 h-12 bg-secondary/20 rounded-full animate-bounce delay-1000"></div>
+        <div className="absolute bottom-32 left-20 w-20 h-20 bg-primary/20 rounded-full animate-bounce delay-500"></div>
+        <div className="absolute bottom-20 right-10 w-14 h-14 bg-success/20 rounded-full animate-bounce delay-1500"></div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-2xl">
+        <Card className="modern-card border-0 shadow-2xl">
+          <CardContent className="p-8 md:p-12">
+            {/* Header Section */}
+            <div className="text-center mb-8">
+              <div className="relative inline-block mb-6">
+                <div className="gradient-bg w-20 h-20 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                  <UserPlus className="text-white h-10 w-10" />
+                </div>
+                <div className="absolute -top-1 -right-1">
+                  <Sparkles className="w-6 h-6 text-accent animate-pulse" />
+                </div>
+              </div>
+              
+              <h2 className="text-4xl font-bold text-foreground mb-3" data-testid="text-registration-title">
+                🌟 Ready to Shine? 🌟
+              </h2>
+              <p className="text-xl text-muted-foreground mb-6">
+                Join our leaderboard and show everyone your skills!
               </p>
+              
+              {/* Quiz Info Card */}
+              <div className="glass-card p-6 rounded-3xl border mb-8">
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <Trophy className="w-6 h-6 text-accent" />
+                  <p className="text-lg font-semibold text-foreground">
+                    {currentQuiz.quiz.title}
+                  </p>
+                </div>
+                <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Star className="w-4 h-4" />
+                    {currentQuiz.questions.length} questions
+                  </span>
+                  <span>•</span>
+                  <span>{currentQuiz.quiz.duration} minutes</span>
+                </div>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name Input */}
+              <div className="space-y-3">
+                <Label htmlFor="name" className="text-lg font-semibold text-foreground flex items-center gap-2">
+                  ✨ What's your name? *
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Enter your awesome name"
+                  className="text-lg p-6 rounded-2xl border-2 border-muted focus:border-primary transition-colors"
+                  required
+                  data-testid="input-participant-name"
+                />
+              </div>
+              
+              {/* Optional Fields Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <Label htmlFor="email" className="text-lg font-semibold text-foreground flex items-center gap-2">
+                    📧 Email (optional)
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="your@email.com"
+                    className="text-lg p-6 rounded-2xl border-2 border-muted focus:border-primary transition-colors"
+                    data-testid="input-participant-email"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <Label htmlFor="phone" className="text-lg font-semibold text-foreground flex items-center gap-2">
+                    📱 Phone (optional)
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+1 (555) 123-4567"
+                    className="text-lg p-6 rounded-2xl border-2 border-muted focus:border-primary transition-colors"
+                    data-testid="input-participant-phone"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="organization" className="text-lg font-semibold text-foreground flex items-center gap-2">
+                  🏢 Organization (optional)
+                </Label>
+                <Input
+                  id="organization"
+                  type="text"
+                  value={formData.organization}
+                  onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                  placeholder="Your amazing company or school"
+                  className="text-lg p-6 rounded-2xl border-2 border-muted focus:border-primary transition-colors"
+                  data-testid="input-participant-organization"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                <Button 
+                  type="submit" 
+                  className={cn(
+                    "flex-1 playful-button text-lg py-6 font-bold text-white transition-all",
+                    "gradient-bg hover:scale-105 active:scale-95"
+                  )}
+                  disabled={loading}
+                  data-testid="button-register-and-start"
+                >
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Registering...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      🚀 Register & Start Quiz
+                    </span>
+                  )}
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  className={cn(
+                    "flex-1 playful-button text-lg py-6 font-bold border-2 transition-all",
+                    "hover:scale-105 active:scale-95 bg-white hover:bg-muted"
+                  )}
+                  onClick={handleSkipRegistration}
+                  data-testid="button-skip-registration"
+                >
+                  <span className="flex items-center gap-2">
+                    ⚡ Skip & Start
+                  </span>
+                </Button>
+              </div>
+            </form>
+
+            {/* Footer */}
+            <div className="mt-8 text-center">
               <p className="text-sm text-muted-foreground">
-                {currentQuiz.questions.length} questions • {currentQuiz.quiz.duration} minutes
+                🎯 Ready to test your destination design knowledge?
               </p>
             </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Label htmlFor="name" className="text-sm font-medium text-foreground mb-2">
-                Name *
-              </Label>
-              <Input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Enter your full name"
-                className="text-lg p-4"
-                required
-                data-testid="input-participant-name"
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="email" className="text-sm font-medium text-foreground mb-2">
-                  Email (Optional)
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="your@email.com"
-                  className="text-lg p-4"
-                  data-testid="input-participant-email"
-                />
-              </div>
-              <div>
-                <Label htmlFor="phone" className="text-sm font-medium text-foreground mb-2">
-                  Phone (Optional)
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+1 (555) 123-4567"
-                  className="text-lg p-4"
-                  data-testid="input-participant-phone"
-                />
-              </div>
-            </div>
-
-            <div>
-              <Label htmlFor="organization" className="text-sm font-medium text-foreground mb-2">
-                Organization (Optional)
-              </Label>
-              <Input
-                id="organization"
-                type="text"
-                value={formData.organization}
-                onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                placeholder="Company or organization name"
-                className="text-lg p-4"
-                data-testid="input-participant-organization"
-              />
-            </div>
-
-            <div className="flex space-x-4">
-              <Button 
-                type="submit" 
-                className="flex-1 touch-button py-4 font-semibold text-lg hover:opacity-90 transition-all"
-                disabled={loading}
-                data-testid="button-register-and-start"
-              >
-                {loading ? "Registering..." : "Register & Start Quiz"}
-              </Button>
-              <Button 
-                type="button" 
-                variant="secondary"
-                className="flex-1 touch-button py-4 font-semibold text-lg hover:opacity-90 transition-all"
-                onClick={handleSkipRegistration}
-                data-testid="button-skip-registration"
-              >
-                Skip Registration
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
