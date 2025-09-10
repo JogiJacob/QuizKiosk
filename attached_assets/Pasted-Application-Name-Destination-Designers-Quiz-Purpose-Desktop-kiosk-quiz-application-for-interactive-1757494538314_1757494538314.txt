@@ -1,0 +1,72 @@
+Application Name: Destination Designers Quiz
+Purpose: Desktop kiosk quiz application for interactive destination design knowledge testing
+Technology Stack Evolution
+
+Initial Plan: Electron + React + Phaser.js + Firebase
+Updated Plan: React + Phaser.js + Firebase + PWA (since Replit doesn't support Electron)
+Final Decision: Local development with React + Vite + Phaser.js + Firebase + PWA
+
+Core Features Discussed
+1. User Types
+
+Admin Users: Configured through Firebase, can manage questions and settings
+Participant Users: Anonymous users taking quizzes
+
+2. Admin Panel Features
+
+Question management (add/edit/delete with multiple choice A,B,C,D)
+Timer settings (max time per quiz/question)
+Quiz configuration and management
+Leaderboard management with export capabilities
+Support for image uploads in questions
+
+3. Participant Experience
+
+Clean kiosk-friendly UI with large touch-friendly buttons
+Questions displayed one at a time with visual timer
+No correct answers shown during quiz
+Progress indicators and question counters
+
+4. Scoring & Leaderboard System
+
+Scoring: 1 point per correct answer
+Separate leaderboards per quiz (key requirement)
+Complete rankings: Show ALL participants, not just top 10
+User highlighting: Current participant's rank highlighted and auto-scrolled
+Optional registration for leaderboard entry
+
+5. Registration Form Fields
+
+Name (required)
+Email (optional)
+Phone Number (optional) - added during discussion
+Organization/Company (optional)
+
+6. Technical Requirements
+
+Kiosk Mode: Fullscreen, touch-friendly, prevent navigation away
+PWA Features: Offline support, desktop installation
+Firebase Collections: questions, quizzes, quizSessions, leaderboard, settings, admins
+Real-time Updates: Leaderboard refreshes automatically
+
+Technical Issues Addressed
+
+Radix UI Select Error: Resolved the <Select.Item /> empty value error with proper implementation patterns
+Platform Compatibility: Shifted from Electron to PWA for better deployment flexibility
+
+Development Approach
+
+Started with Replit consideration, moved to local development for better control
+Comprehensive project structure with proper separation of concerns
+Firebase security rules for admin-only access
+Service worker implementation for offline functionality
+
+Key Architectural Decisions
+
+Quiz-specific leaderboards instead of global rankings
+Complete participant listings with highlighting for current user
+Optional registration - users can see scores without registering
+PWA deployment for kiosk installations
+Firebase backend for real-time data management
+
+The discussion evolved from a basic quiz app concept to a comprehensive kiosk solution with advanced leaderboard features, proper user management, and production-ready deployment strategies.RetryClaude can make mistakes. Please double-check responses. Sonnet 4
