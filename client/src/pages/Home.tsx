@@ -55,10 +55,19 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex items-center space-x-4">
-            {user && (
+            {user ? (
               <NavButton mode="admin" icon={Settings}>
                 Admin Panel
               </NavButton>
+            ) : (
+              <Button
+                onClick={() => window.location.href = '/admin/login'}
+                className="touch-button min-h-12 min-w-[120px] font-semibold transition-all bg-accent text-accent-foreground hover:bg-accent/90"
+                data-testid="button-admin-login"
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                Admin Login
+              </Button>
             )}
             <NavButton mode="quiz" icon={Play}>
               Take Quiz
@@ -111,7 +120,7 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              {user && (
+              {user ? (
                 <Card className="hover:shadow-md transition-all cursor-pointer" onClick={() => setCurrentView('admin')}>
                   <CardContent className="p-6 text-center">
                     <div className="bg-accent/10 p-4 rounded-lg mb-4 inline-block">
@@ -120,6 +129,18 @@ export default function Home() {
                     <h3 className="text-xl font-semibold text-foreground mb-2">Admin Panel</h3>
                     <p className="text-muted-foreground">
                       Manage quizzes, questions, and view analytics
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className="hover:shadow-md transition-all cursor-pointer" onClick={() => window.location.href = '/admin/login'}>
+                  <CardContent className="p-6 text-center">
+                    <div className="bg-accent/10 p-4 rounded-lg mb-4 inline-block">
+                      <Settings className="text-accent h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-foreground mb-2">Admin Login</h3>
+                    <p className="text-muted-foreground">
+                      Sign in to manage quizzes, questions, and view analytics
                     </p>
                   </CardContent>
                 </Card>
