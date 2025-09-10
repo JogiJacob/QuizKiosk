@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useCollection } from '@/hooks/useFirestore';
 import { Quiz, QuizSession } from '@shared/schema';
 import { LeaderboardEntry } from '@/types/quiz';
-import { Trophy, Download, Medal, Award } from 'lucide-react';
+import { Trophy, Download, Medal, Award, Crown, Star, Zap, Target, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function LeaderboardView() {
@@ -126,140 +126,220 @@ export function LeaderboardView() {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-foreground mb-2" data-testid="text-leaderboard-title">
-          Leaderboard
-        </h2>
-        <p className="text-muted-foreground">Top performers across all quizzes</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+      {/* Header Section with Decorative Elements */}
+      <div className="relative">
+        {/* Decorative floating elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 left-10 w-16 h-16 bg-primary/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-20 right-20 w-12 h-12 bg-secondary/10 rounded-full animate-pulse delay-1000"></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 bg-accent/10 rounded-full animate-pulse delay-500"></div>
+        </div>
 
-      {/* Quiz Filter */}
-      <Card className="mb-8">
-        <CardContent className="p-6">
-          <div className="flex flex-wrap items-center gap-4">
-            <label className="font-medium text-foreground">Filter by Quiz:</label>
-            <Select value={selectedQuizId} onValueChange={setSelectedQuizId}>
-              <SelectTrigger className="w-[200px]" data-testid="select-quiz-filter">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Quizzes</SelectItem>
-                {quizzes.map(quiz => (
-                  <SelectItem key={quiz.id} value={quiz.id}>
-                    {quiz.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Leaderboard Table */}
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle data-testid="text-rankings-title">Rankings</CardTitle>
-            <Button 
-              onClick={handleExport}
-              variant="secondary"
-              disabled={!leaderboardData.length}
-              data-testid="button-export"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Export
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          {leaderboardData.length === 0 ? (
-            <div className="p-12 text-center text-muted-foreground" data-testid="text-no-results">
-              No quiz results found. Be the first to take a quiz!
+        <div className="relative z-10 p-6 max-w-7xl mx-auto">
+          {/* Modern Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-24 h-24 gradient-bg rounded-full mb-6 shadow-lg">
+              <Trophy className="w-12 h-12 text-white" />
             </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-muted/30">
-                  <tr>
-                    <th className="text-left p-4 font-semibold text-foreground">Rank</th>
-                    <th className="text-left p-4 font-semibold text-foreground">Participant</th>
-                    <th className="text-left p-4 font-semibold text-foreground">Quiz</th>
-                    <th className="text-left p-4 font-semibold text-foreground">Score</th>
-                    <th className="text-left p-4 font-semibold text-foreground">Accuracy</th>
-                    <th className="text-left p-4 font-semibold text-foreground">Time</th>
-                    <th className="text-left p-4 font-semibold text-foreground">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {leaderboardData.map((entry) => (
-                    <tr
+            <h2 className="text-5xl font-bold text-foreground mb-4" data-testid="text-leaderboard-title">
+              🏆 Hall of Fame 🏆
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Celebrating our destination design champions!
+            </p>
+          </div>
+
+          {/* Quiz Filter Card */}
+          <Card className="modern-card mb-8 border-0 shadow-lg">
+            <CardContent className="p-8">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                <div className="flex items-center gap-3">
+                  <Target className="w-6 h-6 text-primary" />
+                  <label className="text-lg font-semibold text-foreground">Filter by Quiz:</label>
+                </div>
+                <Select value={selectedQuizId} onValueChange={setSelectedQuizId}>
+                  <SelectTrigger className="w-[280px] h-12 rounded-2xl border-2 border-muted focus:border-primary transition-colors" data-testid="select-quiz-filter">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">🌟 All Quizzes</SelectItem>
+                    {quizzes.map(quiz => (
+                      <SelectItem key={quiz.id} value={quiz.id}>
+                        📚 {quiz.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Leaderboard */}
+          <Card className="modern-card border-0 shadow-xl overflow-hidden">
+            <CardHeader className="gradient-bg-secondary text-white p-8">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <Crown className="w-8 h-8" />
+                  <CardTitle className="text-3xl font-bold" data-testid="text-rankings-title">
+                    Top Performers
+                  </CardTitle>
+                </div>
+                <Button 
+                  onClick={handleExport}
+                  variant="secondary"
+                  disabled={!leaderboardData.length}
+                  className="playful-button bg-white text-primary hover:bg-white/90"
+                  data-testid="button-export"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Export Results
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              {leaderboardData.length === 0 ? (
+                <div className="p-16 text-center" data-testid="text-no-results">
+                  <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Star className="w-12 h-12 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">No Champions Yet!</h3>
+                  <p className="text-muted-foreground text-lg">
+                    Be the first to take a quiz and claim your spot! 🚀
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2 p-6">
+                  {leaderboardData.slice(0, 3).map((entry, index) => (
+                    // Top 3 Special Cards
+                    <div
                       key={entry.id}
                       className={cn(
-                        "border-b border-border hover:bg-muted/20 transition-colors",
-                        currentUserEntry?.id === entry.id && "bg-accent/5 ring-2 ring-accent/20"
+                        "relative overflow-hidden rounded-3xl p-6 transition-all hover:scale-[1.02]",
+                        index === 0 && "gradient-bg text-white shadow-2xl",
+                        index === 1 && "gradient-bg-secondary text-white shadow-xl",
+                        index === 2 && "gradient-bg-accent text-white shadow-lg",
+                        currentUserEntry?.id === entry.id && "ring-4 ring-accent/50"
                       )}
                       data-testid={`row-participant-${entry.id}`}
                     >
-                      <td className="p-4">
-                        <div className="flex items-center">
-                          <div className={cn(
-                            "w-8 h-8 rounded-full flex items-center justify-center text-white font-bold mr-3",
-                            getRankBadgeColor(entry.rank)
-                          )}>
-                            {entry.rank}
-                          </div>
+                      {/* Podium number */}
+                      <div className="absolute top-4 right-4">
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-2xl font-bold">#{entry.rank}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-4">
                           {getRankIcon(entry.rank)}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div>
-                          <div className="font-semibold text-foreground" data-testid={`text-participant-name-${entry.id}`}>
-                            {entry.participantName}
-                            {currentUserEntry?.id === entry.id && (
-                              <span className="ml-2 text-accent font-normal">(You)</span>
+                          <div>
+                            <h3 className="text-2xl font-bold flex items-center gap-2" data-testid={`text-participant-name-${entry.id}`}>
+                              {entry.participantName}
+                              {currentUserEntry?.id === entry.id && (
+                                <span className="px-3 py-1 bg-white/20 rounded-full text-sm">(You)</span>
+                              )}
+                            </h3>
+                            {entry.participantOrganization && (
+                              <p className="text-white/80 text-lg">{entry.participantOrganization}</p>
                             )}
+                            <p className="text-white/90" data-testid={`text-quiz-title-${entry.id}`}>
+                              📚 {entry.quizTitle}
+                            </p>
                           </div>
-                          {entry.participantOrganization && (
-                            <div className="text-sm text-muted-foreground">
-                              {entry.participantOrganization}
-                            </div>
-                          )}
                         </div>
-                      </td>
-                      <td className="p-4 text-foreground" data-testid={`text-quiz-title-${entry.id}`}>
-                        {entry.quizTitle}
-                      </td>
-                      <td className="p-4">
-                        <span className="font-bold text-lg text-foreground" data-testid={`text-score-${entry.id}`}>
-                          {entry.score}/{entry.totalQuestions}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <span className={cn(
-                          "px-3 py-1 rounded-full text-sm font-semibold",
-                          entry.accuracy >= 90 ? "bg-green-100 text-green-700" :
-                          entry.accuracy >= 70 ? "bg-blue-100 text-blue-700" :
-                          entry.accuracy >= 50 ? "bg-yellow-100 text-yellow-700" :
-                          "bg-red-100 text-red-700"
-                        )} data-testid={`text-accuracy-${entry.id}`}>
-                          {entry.accuracy}%
-                        </span>
-                      </td>
-                      <td className="p-4 text-foreground" data-testid={`text-time-${entry.id}`}>
-                        {formatTime(entry.timeUsed)}
-                      </td>
-                      <td className="p-4 text-muted-foreground" data-testid={`text-date-${entry.id}`}>
-                        {entry.completedAt.toLocaleDateString()}
-                      </td>
-                    </tr>
+                        
+                        <div className="ml-auto flex items-center gap-8">
+                          <div className="text-center">
+                            <div className="text-3xl font-bold" data-testid={`text-score-${entry.id}`}>
+                              {entry.score}/{entry.totalQuestions}
+                            </div>
+                            <div className="text-white/80 text-sm">Score</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold" data-testid={`text-accuracy-${entry.id}`}>
+                              {entry.accuracy}%
+                            </div>
+                            <div className="text-white/80 text-sm">Accuracy</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-xl font-bold flex items-center gap-1" data-testid={`text-time-${entry.id}`}>
+                              <Clock className="w-5 h-5" />
+                              {formatTime(entry.timeUsed)}
+                            </div>
+                            <div className="text-white/80 text-sm">Time</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+
+                  {/* Remaining entries in clean list format */}
+                  {leaderboardData.slice(3).map((entry) => (
+                    <div
+                      key={entry.id}
+                      className={cn(
+                        "bg-white rounded-2xl p-6 border border-border hover:shadow-md transition-all",
+                        currentUserEntry?.id === entry.id && "ring-2 ring-accent/30 bg-accent/5"
+                      )}
+                      data-testid={`row-participant-${entry.id}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center font-bold text-lg text-foreground">
+                            #{entry.rank}
+                          </div>
+                          <div>
+                            <h4 className="text-lg font-semibold text-foreground flex items-center gap-2" data-testid={`text-participant-name-${entry.id}`}>
+                              {entry.participantName}
+                              {currentUserEntry?.id === entry.id && (
+                                <span className="px-2 py-1 bg-accent/20 text-accent rounded-full text-xs">(You)</span>
+                              )}
+                            </h4>
+                            {entry.participantOrganization && (
+                              <p className="text-muted-foreground">{entry.participantOrganization}</p>
+                            )}
+                            <p className="text-sm text-muted-foreground" data-testid={`text-quiz-title-${entry.id}`}>
+                              {entry.quizTitle}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-6 text-right">
+                          <div>
+                            <div className="text-xl font-bold text-foreground" data-testid={`text-score-${entry.id}`}>
+                              {entry.score}/{entry.totalQuestions}
+                            </div>
+                            <div className="text-xs text-muted-foreground">Score</div>
+                          </div>
+                          <div>
+                            <span className={cn(
+                              "px-3 py-1 rounded-full text-sm font-semibold",
+                              entry.accuracy >= 90 ? "bg-success/20 text-success" :
+                              entry.accuracy >= 70 ? "bg-info/20 text-info" :
+                              entry.accuracy >= 50 ? "bg-warning/20 text-warning" :
+                              "bg-destructive/20 text-destructive"
+                            )} data-testid={`text-accuracy-${entry.id}`}>
+                              {entry.accuracy}%
+                            </span>
+                          </div>
+                          <div className="text-sm text-muted-foreground" data-testid={`text-time-${entry.id}`}>
+                            <Clock className="w-4 h-4 inline mr-1" />
+                            {formatTime(entry.timeUsed)}
+                          </div>
+                          <div className="text-xs text-muted-foreground" data-testid={`text-date-${entry.id}`}>
+                            {entry.completedAt.toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
