@@ -8,6 +8,7 @@ interface QuizContextType {
   nextQuestion: () => void;
   previousQuestion: () => void;
   updateTimeRemaining: (time: number) => void;
+  decrementTime: () => void;
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -16,41 +17,65 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
   const [currentQuiz, setCurrentQuiz] = useState<CurrentQuizState | null>(null);
 
   const updateAnswer = (questionId: string, selectedOptionId: string, isCorrect: boolean) => {
-    if (!currentQuiz) return;
+    setCurrentQuiz(prevQuiz => {
+      if (!prevQuiz) return prevQuiz;
 
-    const existingAnswerIndex = currentQuiz.answers.findIndex(a => a.questionId === questionId);
-    const newAnswer: QuizAnswer = { questionId, selectedOptionId, isCorrect };
+      const existingAnswerIndex = prevQuiz.answers.findIndex(a => a.questionId === questionId);
+      const newAnswer: QuizAnswer = { questionId, selectedOptionId, isCorrect };
 
-    if (existingAnswerIndex >= 0) {
-      currentQuiz.answers[existingAnswerIndex] = newAnswer;
-    } else {
-      currentQuiz.answers.push(newAnswer);
-    }
+      // Create a new answers array instead of mutating the existing one
+      const updatedAnswers = [...prevQuiz.answers];
+      
+      if (existingAnswerIndex >= 0) {
+        updatedAnswers[existingAnswerIndex] = newAnswer;
+      } else {
+        updatedAnswers.push(newAnswer);
+      }
 
-    setCurrentQuiz({ ...currentQuiz });
+      return { 
+        ...prevQuiz,
+        answers: updatedAnswers
+      };
+    });
   };
 
   const nextQuestion = () => {
-    if (!currentQuiz || currentQuiz.currentQuestionIndex >= currentQuiz.questions.length - 1) return;
-    setCurrentQuiz({
-      ...currentQuiz,
-      currentQuestionIndex: currentQuiz.currentQuestionIndex + 1,
+    setCurrentQuiz(prevQuiz => {
+      if (!prevQuiz || prevQuiz.currentQuestionIndex >= prevQuiz.questions.length - 1) return prevQuiz;
+      return {
+        ...prevQuiz,
+        currentQuestionIndex: prevQuiz.currentQuestionIndex + 1,
+      };
     });
   };
 
   const previousQuestion = () => {
-    if (!currentQuiz || currentQuiz.currentQuestionIndex <= 0) return;
-    setCurrentQuiz({
-      ...currentQuiz,
-      currentQuestionIndex: currentQuiz.currentQuestionIndex - 1,
+    setCurrentQuiz(prevQuiz => {
+      if (!prevQuiz || prevQuiz.currentQuestionIndex <= 0) return prevQuiz;
+      return {
+        ...prevQuiz,
+        currentQuestionIndex: prevQuiz.currentQuestionIndex - 1,
+      };
     });
   };
 
   const updateTimeRemaining = (time: number) => {
-    if (!currentQuiz) return;
-    setCurrentQuiz({
-      ...currentQuiz,
-      timeRemaining: time,
+    setCurrentQuiz(prevQuiz => {
+      if (!prevQuiz) return prevQuiz;
+      return {
+        ...prevQuiz,
+        timeRemaining: time,
+      };
+    });
+  };
+
+  const decrementTime = () => {
+    setCurrentQuiz(prevQuiz => {
+      if (!prevQuiz) return prevQuiz;
+      return {
+        ...prevQuiz,
+        timeRemaining: Math.max(prevQuiz.timeRemaining - 1, 0)
+      };
     });
   };
 
@@ -62,6 +87,7 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
       nextQuestion,
       previousQuestion,
       updateTimeRemaining,
+      decrementTime,
     }}>
       {children}
     </QuizContext.Provider>

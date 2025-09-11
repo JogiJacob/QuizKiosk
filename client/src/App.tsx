@@ -11,40 +11,36 @@ import { RegistrationForm } from "@/components/quiz/RegistrationForm";
 import { QuizInterface } from "@/components/quiz/QuizInterface";
 import { QuizCompletion } from "@/components/quiz/QuizCompletion";
 import NotFound from "@/pages/not-found";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Router() {
   const [location] = useLocation();
-  
+
   // Handle hash-based routing for quiz flow
+  const [page, setPage] = useState(window.location.hash.slice(1) || "home");
+
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1);
-      if (hash && !location.includes(hash)) {
-        // Handle hash-based navigation
-        if (hash === 'register' || hash === 'quiz' || hash === 'complete') {
-          // These are handled by the current component state
-          return;
-        }
-      }
+      setPage(hash || "home");
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [location]);
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   // Check if we're in a quiz flow based on hash
   const hash = window.location.hash.slice(1);
-  
-  if (hash === 'register') {
+  console.log("current hash", hash);
+  if (hash === "register") {
     return <RegistrationForm />;
   }
-  
-  if (hash === 'quiz') {
+
+  if (hash === "quiz") {
     return <QuizInterface />;
   }
-  
-  if (hash === 'complete') {
+
+  if (hash === "complete") {
     return <QuizCompletion />;
   }
 
@@ -60,13 +56,14 @@ function Router() {
 function App() {
   useEffect(() => {
     // Register service worker for PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
         .then((registration) => {
-          console.log('SW registered: ', registration);
+          console.log("SW registered: ", registration);
         })
         .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
+          console.log("SW registration failed: ", registrationError);
         });
     }
 
@@ -81,12 +78,12 @@ function App() {
       e.preventDefault();
     };
 
-    document.addEventListener('touchmove', handleTouchMove, { passive: false });
-    document.addEventListener('gesturestart', handleGestureStart);
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    document.addEventListener("gesturestart", handleGestureStart);
 
     return () => {
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('gesturestart', handleGestureStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("gesturestart", handleGestureStart);
     };
   }, []);
 
