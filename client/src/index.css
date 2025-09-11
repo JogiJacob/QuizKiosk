@@ -174,6 +174,94 @@
   background: var(--background);
 }
 
+/* Gaming Home Page Styles */
+.gaming-bg-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, hsl(262, 73%, 63%, 0.2) 0%, transparent 25%),
+    radial-gradient(circle at 75% 75%, hsl(320, 85%, 65%, 0.2) 0%, transparent 25%),
+    radial-gradient(circle at 50% 50%, hsl(45, 93%, 58%, 0.1) 0%, transparent 50%);
+}
+
+.text-glow {
+  text-shadow: 
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 40px currentColor;
+}
+
+.card-glow {
+  transition: all 0.3s ease;
+}
+
+.card-glow:hover {
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.1),
+    0 10px 40px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.gaming-float {
+  animation: gaming-float 6s ease-in-out infinite;
+}
+
+@keyframes gaming-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(1deg); }
+  50% { transform: translateY(-5px) rotate(-1deg); }
+  75% { transform: translateY(-15px) rotate(0.5deg); }
+}
+
+.gaming-pulse {
+  animation: gaming-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gaming-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.bg-shimmer {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: shimmer 15s ease infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Gradients */
+.gradient-gaming {
+  background: linear-gradient(135deg, 
+    hsl(262, 73%, 63%) 0%, 
+    hsl(320, 85%, 65%) 25%,
+    hsl(271, 81%, 56%) 50%,
+    hsl(197, 71%, 44%) 75%,
+    hsl(45, 93%, 58%) 100%);
+}
+
+.gradient-electric {
+  background: linear-gradient(135deg,
+    #667eea 0%,
+    #764ba2 50%,
+    #f093fb 100%);
+}
+
+.gradient-neon {
+  background: linear-gradient(135deg,
+    #12c2e9 0%,
+    #c471ed 50%,
+    #f64f59 100%);
+}
+
 /* Touch-friendly styles */
 @media (hover: none) and (pointer: coarse) {
   .touch-button {
