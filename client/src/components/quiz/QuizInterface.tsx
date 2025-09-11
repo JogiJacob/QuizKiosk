@@ -21,6 +21,22 @@ export function QuizInterface() {
   const [imageLoading, setImageLoading] = useState<boolean>(true);
   const [imageError, setImageError] = useState<boolean>(false);
   const [questionRevealed, setQuestionRevealed] = useState<boolean>(false);
+  
+  // Helper function to sanitize image URLs
+  const sanitizeImageUrl = (url: string | undefined): string | undefined => {
+    if (!url) return undefined;
+    
+    // Fix double https:// prefix
+    const cleanUrl = url.replace(/^https:\/\/https:\/\//i, 'https://');
+    
+    // Basic URL validation
+    try {
+      new URL(cleanUrl);
+      return cleanUrl;
+    } catch {
+      return undefined; // Return undefined for invalid URLs to trigger error fallback
+    }
+  };
 
   // Timer effect - separate from navigation logic
   useEffect(() => {
@@ -281,7 +297,7 @@ export function QuizInterface() {
       )}>
         <CardContent className="p-10">
           {/* Enhanced Question Image with Loading States */}
-          {currentQuestion.imageUrl && (
+          {sanitizeImageUrl(currentQuestion.imageUrl) && (
             <div className="relative mb-8">
               {imageLoading && (
                 <div className="w-full h-48 bg-muted/20 rounded-2xl flex items-center justify-center mb-6">
@@ -304,7 +320,7 @@ export function QuizInterface() {
               )}
               {!imageError && (
                 <img
-                  src={currentQuestion.imageUrl}
+                  src={sanitizeImageUrl(currentQuestion.imageUrl) || ''}
                   alt="Question illustration"
                   className={cn(
                     "w-full h-48 object-cover rounded-2xl shadow-lg transition-all duration-300",

@@ -28,14 +28,20 @@ export function RegistrationForm() {
 
     setLoading(true);
     try {
-      // Normalize empty strings to undefined for optional fields
+      // Normalize empty strings appropriately for Zod validation
       const normalizedData = {
         ...formData,
-        email: formData.email.trim() || undefined,
+        name: formData.name.trim(),
+        email: formData.email.trim() || "", // Keep empty string for email as schema expects
         phone: formData.phone.trim() || undefined,
         organization: formData.organization.trim() || undefined,
       };
-      const validatedData = insertParticipantSchema.parse(normalizedData);
+      
+      // Remove undefined fields entirely for Firebase
+      const cleanData = Object.fromEntries(
+        Object.entries(normalizedData).filter(([_, value]) => value !== undefined)
+      );
+      const validatedData = insertParticipantSchema.parse(cleanData);
       const participantRef = await createDocument('participants', validatedData);
       
       // Store participant info in session storage for the quiz
