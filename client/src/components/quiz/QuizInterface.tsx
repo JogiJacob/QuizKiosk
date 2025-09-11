@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useQuiz } from "@/context/QuizContext";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, ChevronLeft, ChevronRight } from "lucide-react";
+import { Clock, ChevronLeft, ChevronRight, Zap, Trophy, Star, Target, Gamepad2, Flame, Users, ImageIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function QuizInterface() {
@@ -18,6 +18,9 @@ export function QuizInterface() {
   } = useQuiz();
   const { toast } = useToast();
   const [selectedAnswer, setSelectedAnswer] = useState<string>("");
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
+  const [imageError, setImageError] = useState<boolean>(false);
+  const [questionRevealed, setQuestionRevealed] = useState<boolean>(false);
 
   // Timer effect - separate from navigation logic
   useEffect(() => {
@@ -38,7 +41,7 @@ export function QuizInterface() {
   }, [currentQuiz?.timeRemaining]);
 
   useEffect(() => {
-    // Reset selected answer when question changes
+    // Reset selected answer and trigger animations when question changes
     if (currentQuiz) {
       const currentQuestion =
         currentQuiz.questions[currentQuiz.currentQuestionIndex];
@@ -46,6 +49,12 @@ export function QuizInterface() {
         (a) => a.questionId === currentQuestion.id,
       );
       setSelectedAnswer(existingAnswer?.selectedOptionId || "");
+      
+      // Trigger question reveal animation
+      setQuestionRevealed(false);
+      setImageLoading(true);
+      setImageError(false);
+      setTimeout(() => setQuestionRevealed(true), 100);
     }
   }, [currentQuiz?.currentQuestionIndex]);
 
@@ -124,57 +133,105 @@ export function QuizInterface() {
   const isLastQuestion =
     currentQuiz.currentQuestionIndex === currentQuiz.questions.length - 1;
   console.log("currentQuestion", currentQuestion);
+  // Calculate current score and streak
+  const currentScore = currentQuiz.answers.filter((a) => a.isCorrect).length;
+  const totalAnswered = currentQuiz.answers.length;
+  
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      {/* Quiz Header */}
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2
-                className="text-2xl font-bold text-foreground"
-                data-testid="text-current-quiz-title"
-              >
-                {currentQuiz.quiz.title}
-              </h2>
-              <p className="text-muted-foreground">
-                Question{" "}
-                <span data-testid="text-current-question">
-                  {currentQuiz.currentQuestionIndex + 1}
-                </span>{" "}
-                of{" "}
-                <span data-testid="text-total-questions">
-                  {currentQuiz.questions.length}
-                </span>
-              </p>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Gaming Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-10 left-10 w-20 h-20 bg-primary/10 rounded-full animate-bounce delay-0"></div>
+          <div className="absolute top-20 right-16 w-16 h-16 bg-secondary/10 rounded-full animate-bounce delay-1000"></div>
+          <div className="absolute bottom-32 left-20 w-24 h-24 bg-accent/10 rounded-full animate-bounce delay-500"></div>
+          <div className="absolute bottom-16 right-24 w-18 h-18 bg-success/10 rounded-full animate-bounce delay-1500"></div>
+          <div className="absolute top-1/3 left-1/3 w-12 h-12 bg-warning/10 rounded-full animate-pulse delay-700"></div>
+          <div className="absolute bottom-1/3 right-1/3 w-14 h-14 bg-info/10 rounded-full animate-pulse delay-300"></div>
+        </div>
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-5" 
+             style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0)', 
+                     backgroundSize: '30px 30px'}}></div>
+      </div>
+      
+      <div className="relative z-10 p-6 max-w-5xl mx-auto">
+      {/* Gaming HUD Header */}
+      <Card className="modern-card border-0 shadow-2xl mb-8">
+        <CardContent className="p-8">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-6">
+              <div className="gradient-bg w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+                <Gamepad2 className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h2
+                  className="text-3xl font-black text-foreground mb-2"
+                  data-testid="text-current-quiz-title"
+                >
+                  🎯 {currentQuiz.quiz.title}
+                </h2>
+                <div className="flex items-center gap-4 text-lg">
+                  <span className="flex items-center gap-2 text-muted-foreground">
+                    <Target className="w-5 h-5" />
+                    Question{" "}
+                    <span className="font-bold text-primary" data-testid="text-current-question">
+                      {currentQuiz.currentQuestionIndex + 1}
+                    </span>{" "}
+                    /{" "}
+                    <span data-testid="text-total-questions">
+                      {currentQuiz.questions.length}
+                    </span>
+                  </span>
+                  <span className="flex items-center gap-2 text-secondary">
+                    <Trophy className="w-5 h-5" />
+                    Score: <span className="font-bold">{currentScore}/{totalAnswered}</span>
+                  </span>
+                </div>
+              </div>
             </div>
             <div className="text-right">
               <div
                 className={cn(
-                  "bg-accent/10 px-4 py-2 rounded-lg transition-all",
+                  "gradient-bg-accent px-6 py-4 rounded-2xl transition-all shadow-lg",
                   currentQuiz.timeRemaining <= 60 &&
-                    "bg-destructive/10 animate-pulse",
+                    "animate-pulse shadow-red-500/50",
+                  currentQuiz.timeRemaining <= 30 &&
+                    "animate-bounce"
                 )}
               >
-                <Clock
-                  className={cn(
-                    "inline mr-2 h-4 w-4",
-                    currentQuiz.timeRemaining <= 60
-                      ? "text-destructive"
-                      : "text-accent",
-                  )}
-                />
-                <span
-                  className={cn(
-                    "text-xl font-bold",
-                    currentQuiz.timeRemaining <= 60
-                      ? "text-destructive"
-                      : "text-accent",
-                  )}
-                  data-testid="text-time-remaining"
-                >
-                  {formatTime(currentQuiz.timeRemaining)}
-                </span>
+                <div className="flex items-center gap-3">
+                  <div className={cn(
+                    "w-3 h-3 rounded-full animate-pulse",
+                    currentQuiz.timeRemaining <= 60 ? "bg-red-500" : "bg-green-400"
+                  )}></div>
+                  <Clock
+                    className={cn(
+                      "h-6 w-6",
+                      currentQuiz.timeRemaining <= 60
+                        ? "text-red-500"
+                        : "text-white",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "text-2xl font-black tracking-wider",
+                      currentQuiz.timeRemaining <= 60
+                        ? "text-red-500"
+                        : "text-white",
+                    )}
+                    data-testid="text-time-remaining"
+                  >
+                    {formatTime(currentQuiz.timeRemaining)}
+                  </span>
+                </div>
+                {currentQuiz.timeRemaining <= 60 && (
+                  <div className="text-center mt-1">
+                    <span className="text-xs font-bold text-red-500 animate-pulse">
+                      ⚡ HURRY UP!
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -257,6 +314,7 @@ export function QuizInterface() {
           {isLastQuestion ? "Finish Quiz" : "Next"}
           {!isLastQuestion && <ChevronRight className="ml-2 h-4 w-4" />}
         </Button>
+      </div>
       </div>
     </div>
   );
