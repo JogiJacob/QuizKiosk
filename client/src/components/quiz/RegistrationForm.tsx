@@ -7,7 +7,7 @@ import { useQuiz } from '@/context/QuizContext';
 import { createDocument } from '@/hooks/useFirestore';
 import { useToast } from '@/hooks/use-toast';
 import { insertParticipantSchema } from '@shared/schema';
-import { UserPlus, Sparkles, Trophy, Star, ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { UserPlus, Sparkles, Trophy, Star, ChevronDown, ChevronUp, Users, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function RegistrationForm() {
@@ -85,6 +85,10 @@ export function RegistrationForm() {
     window.location.hash = 'quiz';
   };
 
+  const handleGoBack = () => {
+    window.location.href = '/';
+  };
+
   if (!currentQuiz) {
     return (
       <div className="p-6 max-w-2xl mx-auto">
@@ -110,6 +114,19 @@ export function RegistrationForm() {
       <div className="relative z-10 w-full max-w-2xl">
         <Card className="modern-card border-0 shadow-2xl">
           <CardContent className="p-8 md:p-12">
+            {/* Back Button */}
+            <div className="mb-6">
+              <Button
+                onClick={handleGoBack}
+                variant="outline"
+                className="playful-button bg-white/90 backdrop-blur-sm hover:bg-white border-2 hover:border-primary transition-all"
+                data-testid="button-back-home"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Home
+              </Button>
+            </div>
+
             {/* Header Section */}
             <div className="text-center mb-8">
               <div className="relative inline-block mb-6">
