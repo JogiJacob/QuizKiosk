@@ -24,14 +24,25 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function LeaderboardView() {
+interface LeaderboardViewProps {
+  initialQuizId?: string;
+}
+
+export function LeaderboardView({ initialQuizId }: LeaderboardViewProps = {}) {
   const { data: quizzes } = useCollection<Quiz>("quizzes");
   const { data: sessions, loading } =
     useCollection<QuizSession>("quizSessions");
-  const [selectedQuizId, setSelectedQuizId] = useState<string>("all");
+  const [selectedQuizId, setSelectedQuizId] = useState<string>(initialQuizId || "all");
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
     [],
   );
+
+  // React to prop changes to handle runtime navigation
+  useEffect(() => {
+    if (initialQuizId) {
+      setSelectedQuizId(initialQuizId);
+    }
+  }, [initialQuizId]);
   const [currentUserEntry, setCurrentUserEntry] =
     useState<LeaderboardEntry | null>(null);
 

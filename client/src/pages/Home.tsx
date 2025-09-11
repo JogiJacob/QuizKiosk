@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { GraduationCap, Settings, Play, Trophy } from 'lucide-react';
@@ -12,7 +12,43 @@ type ViewMode = 'home' | 'admin' | 'quiz' | 'leaderboard';
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewMode>('home');
+  const [selectedQuizId, setSelectedQuizId] = useState<string | undefined>();
   const { user } = useAuth();
+
+  // Handle leaderboard navigation with quiz ID from session storage
+  useEffect(() => {
+    const applyNavigateToQuiz = (id?: string) => {
+      const quizId = id || sessionStorage.getItem('navigateToQuizLeaderboard');
+      if (quizId) {
+        setSelectedQuizId(quizId);
+        setCurrentView('leaderboard');
+        sessionStorage.removeItem('navigateToQuizLeaderboard');
+      }
+    };
+
+    // Apply on initial load
+    applyNavigateToQuiz();
+
+    // Listen for hash changes to support #leaderboard navigation
+    const onHashChange = () => {
+      if (window.location.hash.startsWith('#leaderboard')) {
+        applyNavigateToQuiz();
+      }
+    };
+
+    // Listen for custom navigation events
+    const onCustomNavigate = (e: CustomEvent) => {
+      applyNavigateToQuiz(e.detail);
+    };
+
+    window.addEventListener('hashchange', onHashChange);
+    window.addEventListener('navigate-leaderboard', onCustomNavigate as any);
+
+    return () => {
+      window.removeEventListener('hashchange', onHashChange);
+      window.removeEventListener('navigate-leaderboard', onCustomNavigate as any);
+    };
+  }, []);
 
   const NavButton = ({ 
     mode, 
@@ -151,7 +187,7 @@ export default function Home() {
 
         {currentView === 'admin' && user && <AdminDashboard />}
         {currentView === 'quiz' && <QuizSelection />}
-        {currentView === 'leaderboard' && <LeaderboardView />}
+        {currentView === 'leaderboard' && <LeaderboardView initialQuizId={selectedQuizId} />}
       </main>
     </div>
   );

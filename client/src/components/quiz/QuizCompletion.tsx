@@ -67,8 +67,13 @@ export function QuizCompletion() {
   };
 
   const handleViewLeaderboard = () => {
-    window.location.hash = '';
-    // This will navigate back to home and allow user to view leaderboard
+    if (currentQuiz?.quiz.id) {
+      // Store the quiz ID for the leaderboard to auto-select
+      sessionStorage.setItem('navigateToQuizLeaderboard', currentQuiz.quiz.id);
+      // Trigger navigation with hash change and custom event
+      window.location.hash = '#leaderboard';
+      window.dispatchEvent(new CustomEvent('navigate-leaderboard', { detail: currentQuiz.quiz.id }));
+    }
   };
 
   const handleTakeAnother = () => {
