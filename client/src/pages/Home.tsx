@@ -1,28 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { GraduationCap, Settings, Play, Trophy, Gamepad2, Target, Zap, Star, Sparkles, Flame, Users, Crown, Rocket } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { AdminDashboard } from '@/components/admin/AdminDashboard';
-import { QuizSelection } from '@/components/quiz/QuizSelection';
-import { LeaderboardView } from '@/components/leaderboard/LeaderboardView';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  GraduationCap,
+  Settings,
+  Play,
+  Trophy,
+  Gamepad2,
+  Target,
+  Zap,
+  Star,
+  Sparkles,
+  Flame,
+  Users,
+  Crown,
+  Rocket,
+} from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { AdminDashboard } from "@/components/admin/AdminDashboard";
+import { QuizSelection } from "@/components/quiz/QuizSelection";
+import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
+import { cn } from "@/lib/utils";
 
-type ViewMode = 'home' | 'admin' | 'quiz' | 'leaderboard';
+type ViewMode = "home" | "admin" | "quiz" | "leaderboard";
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState<ViewMode>('home');
+  const [currentView, setCurrentView] = useState<ViewMode>("home");
   const [selectedQuizId, setSelectedQuizId] = useState<string | undefined>();
   const { user } = useAuth();
 
   // Handle leaderboard navigation with quiz ID from session storage
   useEffect(() => {
     const applyNavigateToQuiz = (id?: string) => {
-      const quizId = id || sessionStorage.getItem('navigateToQuizLeaderboard');
+      const quizId = id || sessionStorage.getItem("navigateToQuizLeaderboard");
       if (quizId) {
         setSelectedQuizId(quizId);
-        setCurrentView('leaderboard');
-        sessionStorage.removeItem('navigateToQuizLeaderboard');
+        setCurrentView("leaderboard");
+        sessionStorage.removeItem("navigateToQuizLeaderboard");
       }
     };
 
@@ -31,7 +45,7 @@ export default function Home() {
 
     // Listen for hash changes to support #leaderboard navigation
     const onHashChange = () => {
-      if (window.location.hash.startsWith('#leaderboard')) {
+      if (window.location.hash.startsWith("#leaderboard")) {
         applyNavigateToQuiz();
       }
     };
@@ -41,23 +55,26 @@ export default function Home() {
       applyNavigateToQuiz(e.detail);
     };
 
-    window.addEventListener('hashchange', onHashChange);
-    window.addEventListener('navigate-leaderboard', onCustomNavigate as any);
+    window.addEventListener("hashchange", onHashChange);
+    window.addEventListener("navigate-leaderboard", onCustomNavigate as any);
 
     return () => {
-      window.removeEventListener('hashchange', onHashChange);
-      window.removeEventListener('navigate-leaderboard', onCustomNavigate as any);
+      window.removeEventListener("hashchange", onHashChange);
+      window.removeEventListener(
+        "navigate-leaderboard",
+        onCustomNavigate as any,
+      );
     };
   }, []);
 
-  const NavButton = ({ 
-    mode, 
-    icon: Icon, 
-    children, 
-    className = "" 
-  }: { 
-    mode: ViewMode; 
-    icon: React.ElementType; 
+  const NavButton = ({
+    mode,
+    icon: Icon,
+    children,
+    className = "",
+  }: {
+    mode: ViewMode;
+    icon: React.ElementType;
     children: React.ReactNode;
     className?: string;
   }) => (
@@ -65,10 +82,10 @@ export default function Home() {
       onClick={() => setCurrentView(mode)}
       className={cn(
         "touch-button min-h-12 min-w-[120px] font-semibold transition-all",
-        currentView === mode 
-          ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+        currentView === mode
+          ? "bg-primary text-primary-foreground hover:bg-primary/90"
           : "bg-secondary text-secondary-foreground hover:bg-secondary/90",
-        className
+        className,
       )}
       data-testid={`button-${mode}`}
     >
@@ -88,13 +105,16 @@ export default function Home() {
           <div className="absolute bottom-20 right-20 w-28 h-28 bg-gradient-to-br from-yellow-500/30 to-orange-500/30 rounded-full animate-bounce delay-1500"></div>
           <div className="absolute top-1/3 left-1/4 w-20 h-20 bg-gradient-to-br from-red-500/30 to-pink-500/30 rounded-full animate-pulse delay-700"></div>
           <div className="absolute bottom-1/3 right-1/3 w-24 h-24 bg-gradient-to-br from-indigo-500/30 to-purple-500/30 rounded-full animate-pulse delay-300"></div>
-          
+
           {/* Floating Gaming Icons */}
           <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 animate-bounce delay-200">
             <Gamepad2 className="w-12 h-12 text-purple-400/50" />
           </div>
           <div className="absolute top-1/2 right-1/4 animate-spin">
-            <Target className="w-10 h-10 text-cyan-400/50" style={{animationDuration: '8s'}} />
+            <Target
+              className="w-10 h-10 text-cyan-400/50"
+              style={{ animationDuration: "8s" }}
+            />
           </div>
           <div className="absolute bottom-1/4 left-1/5 animate-pulse">
             <Zap className="w-14 h-14 text-yellow-400/50" />
@@ -104,11 +124,16 @@ export default function Home() {
           </div>
         </div>
         {/* Dynamic grid pattern */}
-        <div className="absolute inset-0 opacity-10" 
-             style={{backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.4) 1px, transparent 0)', 
-                     backgroundSize: '50px 50px'}}></div>
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 2px 2px, rgba(255,255,255,0.4) 1px, transparent 0)",
+            backgroundSize: "50px 50px",
+          }}
+        ></div>
       </div>
-      
+
       {/* Navigation */}
       <nav className="relative z-20 bg-black/20 backdrop-blur-md border-b border-white/10 p-4 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -116,7 +141,10 @@ export default function Home() {
             <div className="gradient-bg p-4 rounded-2xl shadow-lg">
               <Gamepad2 className="text-white h-8 w-8" />
             </div>
-            <h1 className="text-3xl font-black text-white drop-shadow-lg" data-testid="text-app-title">
+            <h1
+              className="text-3xl font-black text-white drop-shadow-lg"
+              data-testid="text-app-title"
+            >
               🎮 Destination Designers Quiz
             </h1>
           </div>
@@ -124,7 +152,7 @@ export default function Home() {
             {/* Admin access - discrete in header only */}
             {user ? (
               <Button
-                onClick={() => setCurrentView('admin')}
+                onClick={() => setCurrentView("admin")}
                 className="touch-button px-4 py-2 font-semibold transition-all bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 backdrop-blur-sm"
                 data-testid="button-admin-panel"
               >
@@ -132,7 +160,7 @@ export default function Home() {
               </Button>
             ) : (
               <Button
-                onClick={() => window.location.href = '/admin/login'}
+                onClick={() => (window.location.href = "/admin/login")}
                 className="touch-button px-4 py-2 font-semibold transition-all bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 backdrop-blur-sm"
                 data-testid="button-admin-login"
               >
@@ -145,7 +173,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-1">
-        {currentView === 'home' && (
+        {currentView === "home" && (
           <div className="min-h-screen flex items-center justify-center p-6">
             <div className="max-w-6xl mx-auto text-center">
               {/* Gaming Hero Section */}
@@ -154,35 +182,39 @@ export default function Home() {
                   <div className="gradient-bg w-32 h-32 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
                     <Crown className="text-white h-16 w-16" />
                   </div>
-                  <div className="absolute -top-2 -right-2 animate-spin" style={{animationDuration: '3s'}}>
+                  <div
+                    className="absolute -top-2 -right-2 animate-spin"
+                    style={{ animationDuration: "3s" }}
+                  >
                     <Sparkles className="w-8 h-8 text-yellow-400" />
                   </div>
                   <div className="absolute -bottom-2 -left-2 animate-bounce">
                     <Flame className="w-6 h-6 text-orange-400" />
                   </div>
                 </div>
-                
-                <h2 className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl mb-6 animate-in slide-in-from-top-4" data-testid="text-welcome-title">
+
+                <h2
+                  className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl mb-6 animate-in slide-in-from-top-4"
+                  data-testid="text-welcome-title"
+                >
                   <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                    LEVEL UP
+                    QUIZ, PLAY
                   </span>
                   <br />
-                  <span className="text-white">
-                    YOUR SKILLS
-                  </span>
+                  <span className="text-white">CONQUER</span>
                 </h2>
-                
+
                 <p className="text-2xl text-white/90 mb-12 drop-shadow-lg animate-in slide-in-from-top-6">
-                  🎯 Master destination design principles through epic gaming challenges!
+                  🎯 Challenge your mind, climb the leaderboard!
                 </p>
               </div>
 
               {/* Gaming Action Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 {/* Take Quiz Card */}
-                <Card 
-                  className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-md border-2 border-purple-400/30 hover:border-purple-400/60" 
-                  onClick={() => setCurrentView('quiz')}
+                <Card
+                  className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-md border-2 border-purple-400/30 hover:border-purple-400/60"
+                  onClick={() => setCurrentView("quiz")}
                   data-testid="card-take-quiz"
                 >
                   <CardContent className="p-10 text-center">
@@ -191,17 +223,20 @@ export default function Home() {
                         <Rocket className="text-white h-10 w-10 group-hover:animate-bounce" />
                       </div>
                       <div className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Sparkles className="w-6 h-6 text-yellow-400 animate-spin" style={{animationDuration: '2s'}} />
+                        <Sparkles
+                          className="w-6 h-6 text-yellow-400 animate-spin"
+                          style={{ animationDuration: "2s" }}
+                        />
                       </div>
                     </div>
-                    
-                    <h3 className="text-3xl font-black text-white mb-4 group-hover:text-purple-200 transition-colors">
+
+                    <h3 className="text-3xl font-black text-blue-600 mb-4 group-hover:text-purple-200 transition-colors">
                       🚀 START QUEST
                     </h3>
-                    <p className="text-lg text-white/80 group-hover:text-white transition-colors">
-                      Embark on epic challenges and prove your destination design mastery!
+                    <p className="text-lg text-yellow/80 group-hover:text-purple-200 transition-colors">
+                      Challenge your mind, climb the leaderboard!
                     </p>
-                    
+
                     <div className="mt-6">
                       <Button className="playful-button gradient-bg text-white font-bold px-8 py-3 text-lg hover:scale-105 transition-all shadow-lg">
                         <Play className="mr-2 h-5 w-5" />
@@ -212,9 +247,9 @@ export default function Home() {
                 </Card>
 
                 {/* Leaderboard Card */}
-                <Card 
-                  className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-cyan-600/20 to-blue-600/20 backdrop-blur-md border-2 border-cyan-400/30 hover:border-cyan-400/60" 
-                  onClick={() => setCurrentView('leaderboard')}
+                <Card
+                  className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-cyan-600/20 to-blue-600/20 backdrop-blur-md border-2 border-cyan-400/30 hover:border-cyan-400/60"
+                  onClick={() => setCurrentView("leaderboard")}
                   data-testid="card-leaderboard"
                 >
                   <CardContent className="p-10 text-center">
@@ -226,14 +261,14 @@ export default function Home() {
                         <Crown className="w-6 h-6 text-yellow-400 animate-pulse" />
                       </div>
                     </div>
-                    
-                    <h3 className="text-3xl font-black text-white mb-4 group-hover:text-cyan-200 transition-colors">
+
+                    <h3 className="text-3xl font-black text-blue-600 mb-4 group-hover:text-cyan-200 transition-colors">
                       🏆 HALL OF FAME
                     </h3>
-                    <p className="text-lg text-white/80 group-hover:text-white transition-colors">
-                      Climb the ranks and become a legendary destination designer!
+                    <p className="text-lg text-blue-600/80 group-hover:text-purple-200 transition-colors">
+                      Climb the ranks and become the Champion!
                     </p>
-                    
+
                     <div className="mt-6">
                       <Button className="playful-button gradient-bg-secondary text-white font-bold px-8 py-3 text-lg hover:scale-105 transition-all shadow-lg">
                         <Users className="mr-2 h-5 w-5" />
@@ -243,20 +278,22 @@ export default function Home() {
                   </CardContent>
                 </Card>
               </div>
-              
+
               {/* Gaming Stats/Info */}
               <div className="mt-12 text-center">
-                <p className="text-white/70 text-lg">
-                  ⚡ Ready to test your skills? Join thousands of destination design masters! ⚡
+                <p className="text-yellow/70 text-lg">
+                  ⚡ Ready to test your skills? Join thousands of players! ⚡
                 </p>
               </div>
             </div>
           </div>
         )}
 
-        {currentView === 'admin' && user && <AdminDashboard />}
-        {currentView === 'quiz' && <QuizSelection />}
-        {currentView === 'leaderboard' && <LeaderboardView initialQuizId={selectedQuizId} />}
+        {currentView === "admin" && user && <AdminDashboard />}
+        {currentView === "quiz" && <QuizSelection />}
+        {currentView === "leaderboard" && (
+          <LeaderboardView initialQuizId={selectedQuizId} />
+        )}
       </main>
     </div>
   );
