@@ -4,21 +4,18 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
-// ⚠️ Replace with your own Firebase config from the console
+// Example for React + Firebase v9+
 const firebaseConfig = {
-  apiKey: "AIzaSyCra6aSGl_Bb1AcQRbkozQmnyY-sqOdkzQ",
-  authDomain: "destination-quiz.firebaseapp.com",
-  projectId: "destination-quiz",
-  storageBucket: "destination-quiz.firebasestorage.app",
-  messagingSenderId: "556773175822",
-  appId: "1:556773175822:web:f95dc0fe313476cb4a825f",
-  measurementId: "G-MQ7FBS1SBC",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
+// Initialize
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-export const db = getFirestore(app);
 export const auth = getAuth(app);
-export const storage = getStorage(app);
-
-export default app;
