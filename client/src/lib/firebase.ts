@@ -3,12 +3,9 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-console.log("envvvjo", import.meta.env)
-console.log("Env Vars:", {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-});
+console.log("All Env Vars:", import.meta.env);
+console.log("Test Var:", import.meta.env.VITE_TEST_VAR);
+console.log("Firebase API Key:", import.meta.env.VITE_FIREBASE_API_KEY);
 
 
 const firebaseConfig = {

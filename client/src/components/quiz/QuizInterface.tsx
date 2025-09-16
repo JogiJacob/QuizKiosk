@@ -199,10 +199,10 @@ export function QuizInterface() {
                       {currentQuiz.questions.length}
                     </span>
                   </span>
-                  <span className="flex items-center gap-2 text-secondary">
+                  {/* <span className="flex items-center gap-2 text-secondary">
                     <Trophy className="w-5 h-5" />
                     Score: <span className="font-bold">{currentScore}/{totalAnswered}</span>
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>
@@ -433,7 +433,7 @@ export function QuizInterface() {
         </Button>
         
         {/* Middle Stats Display */}
-        <div className="flex items-center gap-6 text-center">
+        {/* <div className="flex items-center gap-6 text-center">
           <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
             <Flame className="w-5 h-5 text-primary" />
             <span className="font-bold text-primary">{currentScore} Correct</span>
@@ -443,7 +443,7 @@ export function QuizInterface() {
               <span className="font-bold text-muted-foreground">{totalAnswered - currentScore} Wrong</span>
             </div>
           )}
-        </div>
+        </div> */}
         
         <Button
           className={cn(
