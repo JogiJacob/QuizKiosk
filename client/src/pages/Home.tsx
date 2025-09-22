@@ -97,8 +97,8 @@ export default function Home() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Gaming Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-blue-600/20 to-cyan-500/20">
-        <div className="absolute inset-0 opacity-40">
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <div className="absolute inset-0 opacity-60">
           <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-full animate-bounce delay-0"></div>
           <div className="absolute top-40 right-32 w-24 h-24 bg-gradient-to-br from-blue-500/30 to-cyan-500/30 rounded-full animate-bounce delay-1000"></div>
           <div className="absolute bottom-32 left-40 w-40 h-40 bg-gradient-to-br from-green-500/30 to-emerald-500/30 rounded-full animate-bounce delay-500"></div>
@@ -174,116 +174,129 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10 flex-1">
         {currentView === "home" && (
-          <div className="min-h-screen flex items-center justify-center p-6">
-            <div className="max-w-6xl mx-auto text-center">
-              {/* Gaming Hero Section */}
-              <div className="mb-16">
-                <div className="relative inline-block mb-8">
-                  <div className="gradient-bg w-32 h-32 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
-                    <Crown className="text-white h-16 w-16" />
+          <div className="min-h-screen flex flex-col p-6">
+            {/* Animated Marquee Text - Full Width at Top */}
+            <div className="w-full overflow-hidden mb-8 bg-black/80 rounded-lg p-4">
+            <div className="whitespace-nowrap marquee text-3xl font-black animate-pulse text-white">
+            🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟 FREE TO PLAY • TEST YOUR KNOWLEDGE • WIN BIG PRIZES • UNLIMITED FUN • JOIN NOW! 🌟
+              </div>
+            </div>
+            <div className="flex-1 flex items-center justify-center">
+
+              <div className="max-w-6xl mx-auto text-center">
+                {/* Gaming Hero Section */}
+                <div className="mb-16">
+                  <div className="relative inline-block mb-8">
+                    <div className="gradient-bg w-32 h-32 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
+                      <Crown className="text-white h-16 w-16" />
+                    </div>
+                    <div
+                      className="absolute -top-2 -right-2 animate-spin"
+                      style={{ animationDuration: "3s" }}
+                    >
+                      <Sparkles className="w-8 h-8 text-yellow-400" />
+                    </div>
+                    <div className="absolute -bottom-2 -left-2 animate-bounce">
+                      <Flame className="w-6 h-6 text-orange-400" />
+                    </div>
                   </div>
-                  <div
-                    className="absolute -top-2 -right-2 animate-spin"
-                    style={{ animationDuration: "3s" }}
+
+                  <h2
+                    className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl mb-6 animate-in slide-in-from-top-4"
+                    data-testid="text-welcome-title"
                   >
-                    <Sparkles className="w-8 h-8 text-yellow-400" />
-                  </div>
-                  <div className="absolute -bottom-2 -left-2 animate-bounce">
-                    <Flame className="w-6 h-6 text-orange-400" />
-                  </div>
+                    <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+                      FREE QUIZ FUN!
+                    </span>
+                    <br />
+                    <span className="text-white animate-bounce">CONQUER & WIN</span>
+                  </h2>
+
+                  <p className="text-2xl text-white/90 mb-12 drop-shadow-lg animate-in slide-in-from-top-6">
+                    🎯 This quiz is FREE for you to try! Challenge yourself, conquer the questions, and climb to the top!
+                  </p>
+
                 </div>
 
-                <h2
-                  className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl mb-6 animate-in slide-in-from-top-4"
-                  data-testid="text-welcome-title"
-                >
-                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                    QUIZ, PLAY
-                  </span>
-                  <br />
-                  <span className="text-white">CONQUER</span>
-                </h2>
-
-                <p className="text-2xl text-white/90 mb-12 drop-shadow-lg animate-in slide-in-from-top-6">
-                  🎯 Challenge your mind, climb the leaderboard!
-                </p>
-              </div>
-
-              {/* Gaming Action Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                {/* Take Quiz Card */}
-                <Card
-                  className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-md border-2 border-purple-400/30 hover:border-purple-400/60"
-                  onClick={() => setCurrentView("quiz")}
-                  data-testid="card-take-quiz"
-                >
-                  <CardContent className="p-10 text-center">
-                    <div className="relative mb-6">
-                      <div className="gradient-bg w-20 h-20 rounded-2xl flex items-center justify-center mx-auto shadow-lg group-hover:animate-pulse">
-                        <Rocket className="text-white h-10 w-10 group-hover:animate-bounce" />
+                {/* Gaming Action Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                  {/* Take Quiz Card */}
+                  <Card
+                    className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-md border-2 border-purple-400/30 hover:border-purple-400/60"
+                    onClick={() => setCurrentView("quiz")}
+                    data-testid="card-take-quiz"
+                  >
+                    <CardContent className="p-10 text-center">
+                      <div className="relative mb-6">
+                        <div className="gradient-bg w-20 h-20 rounded-2xl flex items-center justify-center mx-auto shadow-lg group-hover:animate-pulse">
+                          <Rocket className="text-white h-10 w-10 group-hover:animate-bounce" />
+                        </div>
+                        <div className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Sparkles
+                            className="w-6 h-6 text-yellow-400 animate-spin"
+                            style={{ animationDuration: "2s" }}
+                          />
+                        </div>
                       </div>
-                      <div className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Sparkles
-                          className="w-6 h-6 text-yellow-400 animate-spin"
-                          style={{ animationDuration: "2s" }}
-                        />
+
+                      <h3 className="text-3xl font-black text-blue-600 mb-4 group-hover:text-purple-200 transition-colors">
+                        🚀 START QUEST
+                      </h3>
+                      <p className="text-lg text-yellow-600/80 group-hover:text-purple-200 transition-colors">
+                        FREE quiz adventure awaits! Conquer questions and become a legend!
+                      </p>
+
+                      <div className="mt-6">
+                        <Button className="playful-button gradient-bg text-white font-bold px-8 py-3 text-lg hover:scale-105 transition-all shadow-lg">
+                          <Play className="mr-2 h-5 w-5" />
+                          Begin Adventure
+                        </Button>
                       </div>
-                    </div>
+                    </CardContent>
+                  </Card>
 
-                    <h3 className="text-3xl font-black text-blue-600 mb-4 group-hover:text-purple-200 transition-colors">
-                      🚀 START QUEST
-                    </h3>
-                    <p className="text-lg text-yellow/80 group-hover:text-purple-200 transition-colors">
-                      Challenge your mind, climb the leaderboard!
-                    </p>
-
-                    <div className="mt-6">
-                      <Button className="playful-button gradient-bg text-white font-bold px-8 py-3 text-lg hover:scale-105 transition-all shadow-lg">
-                        <Play className="mr-2 h-5 w-5" />
-                        Begin Adventure
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Leaderboard Card */}
-                <Card
-                  className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-cyan-600/20 to-blue-600/20 backdrop-blur-md border-2 border-cyan-400/30 hover:border-cyan-400/60"
-                  onClick={() => setCurrentView("leaderboard")}
-                  data-testid="card-leaderboard"
-                >
-                  <CardContent className="p-10 text-center">
-                    <div className="relative mb-6">
-                      <div className="gradient-bg-secondary w-20 h-20 rounded-2xl flex items-center justify-center mx-auto shadow-lg group-hover:animate-pulse">
-                        <Trophy className="text-white h-10 w-10 group-hover:animate-bounce" />
+                  {/* Leaderboard Card */}
+                  <Card
+                    className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-cyan-600/20 to-blue-600/20 backdrop-blur-md border-2 border-cyan-400/30 hover:border-cyan-400/60"
+                    onClick={() => setCurrentView("leaderboard")}
+                    data-testid="card-leaderboard"
+                  >
+                    <CardContent className="p-10 text-center">
+                      <div className="relative mb-6">
+                        <div className="gradient-bg-secondary w-20 h-20 rounded-2xl flex items-center justify-center mx-auto shadow-lg group-hover:animate-pulse">
+                          <Trophy className="text-white h-10 w-10 group-hover:animate-bounce" />
+                        </div>
+                        <div className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Crown className="w-6 h-6 text-yellow-400 animate-pulse" />
+                        </div>
                       </div>
-                      <div className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Crown className="w-6 h-6 text-yellow-400 animate-pulse" />
+
+                      <h3 className="text-3xl font-black text-blue-600 mb-4 group-hover:text-cyan-200 transition-colors">
+                        🏆 HALL OF FAME
+                      </h3>
+                      <p className="text-lg text-blue-600/80 group-hover:text-purple-200 transition-colors">
+                        See the champions! FREE to join, unlimited glory awaits!
+                      </p>
+
+                      <div className="mt-6">
+                        <Button className="playful-button gradient-bg-secondary text-white font-bold px-8 py-3 text-lg hover:scale-105 transition-all shadow-lg">
+                          <Users className="mr-2 h-5 w-5" />
+                          View Champions
+                        </Button>
                       </div>
-                    </div>
+                    </CardContent>
+                  </Card>
+                </div>
 
-                    <h3 className="text-3xl font-black text-blue-600 mb-4 group-hover:text-cyan-200 transition-colors">
-                      🏆 HALL OF FAME
-                    </h3>
-                    <p className="text-lg text-blue-600/80 group-hover:text-purple-200 transition-colors">
-                      Climb the ranks and become the Champion!
-                    </p>
-
-                    <div className="mt-6">
-                      <Button className="playful-button gradient-bg-secondary text-white font-bold px-8 py-3 text-lg hover:scale-105 transition-all shadow-lg">
-                        <Users className="mr-2 h-5 w-5" />
-                        View Champions
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Gaming Stats/Info */}
-              <div className="mt-12 text-center">
-                <p className="text-yellow/70 text-lg">
-                  ⚡ Ready to test your skills? Join thousands of players! ⚡
-                </p>
+                {/* Gaming Stats/Info */}
+                <div className="mt-12 text-center">
+                  <p className="text-white text-2xl animate-pulse drop-shadow-2xl font-bold">
+                    🌟 FREE QUIZ • UNLIMITED FUN • TEST YOUR SKILLS • JOIN THE EXCITEMENT NOW! 🌟
+                  </p>
+                  <p className="text-cyan-300 text-lg font-semibold mt-6 drop-shadow-lg">
+                    Powered by Destination Designers
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -295,6 +308,22 @@ export default function Home() {
           <LeaderboardView initialQuizId={selectedQuizId} />
         )}
       </main>
+      <style>
+        {`
+          @keyframes marquee {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-100%);
+            }
+          }
+          .marquee {
+            animation: marquee 10s linear infinite;
+            will-change: transform;
+          }
+        `}
+      </style>
     </div>
   );
 }
