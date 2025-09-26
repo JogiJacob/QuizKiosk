@@ -305,7 +305,10 @@ export default function Home() {
         {currentView === "admin" && user && <AdminDashboard />}
         {currentView === "quiz" && <QuizSelection />}
         {currentView === "leaderboard" && (
-          <LeaderboardView initialQuizId={selectedQuizId} />
+          <LeaderboardView 
+            initialQuizId={selectedQuizId} 
+            onNavigateHome={() => setCurrentView("home")}
+          />
         )}
       </main>
       <style>

@@ -17,6 +17,7 @@ export default defineConfig({
       : []),
   ],
   envPrefix: ['VITE_'],
+  envDir: '.',
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -30,6 +31,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    port: 3000,
+    host: 'localhost',
     fs: {
       strict: true,
       deny: ["**/.*"],

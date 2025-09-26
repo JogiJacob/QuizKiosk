@@ -21,14 +21,17 @@ import {
   Zap,
   Target,
   Clock,
+  Home,
+  ArrowLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LeaderboardViewProps {
   initialQuizId?: string;
+  onNavigateHome?: () => void;
 }
 
-export function LeaderboardView({ initialQuizId }: LeaderboardViewProps = {}) {
+export function LeaderboardView({ initialQuizId, onNavigateHome }: LeaderboardViewProps = {}) {
   const { data: quizzes } = useCollection<Quiz>("quizzes");
   const { data: sessions, loading } =
     useCollection<QuizSession>("quizSessions");
@@ -179,6 +182,20 @@ export function LeaderboardView({ initialQuizId }: LeaderboardViewProps = {}) {
         </div>
 
         <div className="relative z-10 p-6 max-w-7xl mx-auto">
+          {/* Back Button */}
+          {onNavigateHome && (
+            <div className="absolute top-4 left-4">
+              <Button 
+                onClick={onNavigateHome}
+                variant="outline" 
+                className="bg-white/20 backdrop-blur-md border-white/30 text-foreground hover:bg-white/40 transition-all duration-300 shadow-lg"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Home
+              </Button>
+            </div>
+          )}
+          
           {/* Modern Header */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center w-24 h-24 gradient-bg rounded-full mb-6 shadow-lg">
