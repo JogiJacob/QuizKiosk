@@ -137,7 +137,7 @@ export default function Home() {
       {/* Navigation */}
       <nav className="relative z-20 bg-black/20 backdrop-blur-md border-b border-white/10 p-4 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 cursor-pointer" onClick={() => setCurrentView('home')}>
             <div className="gradient-bg p-4 rounded-2xl shadow-lg">
               <Gamepad2 className="text-white h-8 w-8" />
             </div>
