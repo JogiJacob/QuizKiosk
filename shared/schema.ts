@@ -8,6 +8,7 @@ export const quizSchema = z.object({
   duration: z.number(), // minutes
   questionCount: z.number(),
   isActive: z.boolean(),
+  customSuccessMessage: z.string().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -17,6 +18,7 @@ export const insertQuizSchema = z.object({
   description: z.string().min(1, "Description is required"),
   duration: z.number().min(1, "Duration must be at least 1 minute"),
   isActive: z.boolean().default(true),
+  customSuccessMessage: z.string().optional(),
 });
 
 // Question Schema

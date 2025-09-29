@@ -5,10 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useCollection, createDocument, updateDocument, deleteDocument } from '@/hooks/useFirestore';
+import { useCollection, createDocument, updateDocument, deleteQuizAndLeaderboard, clearLeaderboardForQuiz } from '@/hooks/useFirestore';
 import { useToast } from '@/hooks/use-toast';
 import { Quiz, insertQuizSchema } from '@shared/schema';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Eraser } from 'lucide-react';
 
 export function QuizManager() {
   const { data: quizzes, loading } = useCollection<Quiz>('quizzes');
@@ -20,6 +20,7 @@ export function QuizManager() {
     description: '',
     duration: 10,
     isActive: true,
+    customSuccessMessage: '',
   });
 
   const resetForm = () => {
@@ -28,6 +29,7 @@ export function QuizManager() {
       description: '',
       duration: 10,
       isActive: true,
+      customSuccessMessage: '',
     });
     setEditingQuiz(null);
   };
@@ -70,23 +72,41 @@ export function QuizManager() {
       description: quiz.description,
       duration: quiz.duration,
       isActive: quiz.isActive,
+      customSuccessMessage: quiz.customSuccessMessage || '',
     });
     setDialogOpen(true);
   };
 
   const handleDelete = async (quiz: Quiz) => {
-    if (!confirm('Are you sure you want to delete this quiz?')) return;
+    if (!confirm('Are you sure you want to delete this quiz and its leaderboard?')) return;
     
     try {
-      await deleteDocument('quizzes', quiz.id);
+      await deleteQuizAndLeaderboard(quiz.id);
       toast({
         title: "Success",
-        description: "Quiz deleted successfully",
+        description: "Quiz and its leaderboard deleted successfully",
       });
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to delete quiz",
+        description: error.message || "Failed to delete quiz and leaderboard",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleClearLeaderboard = async (quiz: Quiz) => {
+    if (!confirm('Are you sure you want to clear all leaderboard entries for this quiz?')) return;
+    try {
+      const deletedCount = await clearLeaderboardForQuiz(quiz.id);
+      toast({
+        title: "Leaderboard cleared",
+        description: `${deletedCount} entries removed.`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to clear leaderboard",
         variant: "destructive",
       });
     }
@@ -144,6 +164,16 @@ export function QuizManager() {
                   />
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="customSuccessMessage">Custom 100% Success Message (Optional)</Label>
+                  <Textarea
+                    id="customSuccessMessage"
+                    value={formData.customSuccessMessage}
+                    onChange={(e) => setFormData({ ...formData, customSuccessMessage: e.target.value })}
+                    placeholder="E.g., 'Wow, you're a genius!'"
+                    data-testid="input-quiz-custom-success-message"
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="duration">Duration (minutes)</Label>
                   <Input
                     id="duration"
@@ -198,6 +228,14 @@ export function QuizManager() {
                     data-testid={`button-edit-quiz-${quiz.id}`}
                   >
                     <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleClearLeaderboard(quiz)}
+                    data-testid={`button-clear-leaderboard-${quiz.id}`}
+                  >
+                    <Eraser className="h-4 w-4" />
                   </Button>
                   <Button
                     size="sm"

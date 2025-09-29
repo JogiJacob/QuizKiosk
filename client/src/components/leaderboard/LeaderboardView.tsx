@@ -42,10 +42,9 @@ export function LeaderboardView({ initialQuizId, onNavigateHome }: LeaderboardVi
 
   // React to prop changes to handle runtime navigation
   useEffect(() => {
-    if (initialQuizId) {
-      setSelectedQuizId(initialQuizId);
-    }
+    setSelectedQuizId(initialQuizId || "all");
   }, [initialQuizId]);
+  
   const [currentUserEntry, setCurrentUserEntry] =
     useState<LeaderboardEntry | null>(null);
 

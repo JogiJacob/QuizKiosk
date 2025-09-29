@@ -21,20 +21,21 @@ export function QuizCompletion() {
       const parsedResults = JSON.parse(savedResults);
       const parsedParticipant = JSON.parse(participant);
 
-      setResults({
+      const newResults = {
         ...parsedResults,
         participant: parsedParticipant,
         percentage: Math.round(
           (parsedResults.score / parsedResults.totalQuestions) * 100,
         ),
-      });
+      };
+      setResults(newResults);
 
       // Save to Firestore
       saveQuizSession(parsedResults, parsedParticipant);
     }
   }, [currentQuiz]);
 
-  const saveQuizSession = async (results: any, participant: any) => {
+  const saveQuizSession = async (resultsData: any, participant: any) => {
     if (!currentQuiz || saving) return;
 
     setSaving(true);
@@ -43,10 +44,10 @@ export function QuizCompletion() {
         quizId: currentQuiz.quiz.id,
         participantId: participant.id,
         participantName: participant.name,
-        score: results.score,
-        totalQuestions: results.totalQuestions,
-        timeUsed: results.timeUsed,
-        answers: results.answers,
+        score: resultsData.score,
+        totalQuestions: resultsData.totalQuestions,
+        timeUsed: resultsData.timeUsed,
+        answers: resultsData.answers,
       };
 
       const validatedData = insertQuizSessionSchema.parse(sessionData);
@@ -71,9 +72,7 @@ export function QuizCompletion() {
 
   const handleViewLeaderboard = () => {
     if (currentQuiz?.quiz.id) {
-      // Store the quiz ID for the leaderboard to auto-select
       sessionStorage.setItem("navigateToQuizLeaderboard", currentQuiz.quiz.id);
-      // Trigger navigation with hash change and custom event
       window.location.hash = "#leaderboard";
       window.dispatchEvent(
         new CustomEvent("navigate-leaderboard", {
@@ -152,6 +151,13 @@ export function QuizCompletion() {
           <p className="text-xl text-muted-foreground mb-8">
             Great job, {results.participant.name}! Here are your results:
           </p>
+
+          {results.percentage === 100 && currentQuiz?.quiz.customSuccessMessage && (
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md mb-8 shadow-lg" data-testid="custom-success-message">
+              <p className="font-bold">A special message for you:</p>
+              <p>{currentQuiz.quiz.customSuccessMessage}</p>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-muted/30 p-6 rounded-xl">

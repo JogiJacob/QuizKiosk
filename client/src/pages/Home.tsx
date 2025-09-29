@@ -258,7 +258,10 @@ export default function Home() {
                   {/* Leaderboard Card */}
                   <Card
                     className="group modern-card border-0 shadow-2xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl bg-gradient-to-br from-cyan-600/20 to-blue-600/20 backdrop-blur-md border-2 border-cyan-400/30 hover:border-cyan-400/60"
-                    onClick={() => setCurrentView("leaderboard")}
+                    onClick={() => {
+                      setSelectedQuizId(undefined); // Reset quiz selection
+                      setCurrentView("leaderboard");
+                    }}
                     data-testid="card-leaderboard"
                   >
                     <CardContent className="p-10 text-center">
